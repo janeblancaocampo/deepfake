@@ -1,29 +1,22 @@
 import streamlit as st
-from pydub import AudioSegment
-import librosa.display
-import io
+import librosa
+import matplotlib.pyplot as plt
+import numpy as np
 
 def process_audio_file(uploaded_file):
+    # Add your processing logic here
     st.audio(uploaded_file, format='audio/wav')
 
-    audio_bytes = io.BytesIO(uploaded_file.read())
-    audio = AudioSegment.from_file(audio_bytes)
+    # Load audio using librosa
+    y, sr = librosa.load(uploaded_file)
 
-    # Convert to WAV format
-    with io.BytesIO() as wav_buffer:
-        audio.export(wav_buffer, format="wav")
-        wav_buffer.seek(0)
-
-        # Load audio using librosa
-        y, sr = librosa.load(wav_buffer)
-
-        # Plot waveform
-        plt.figure(figsize=(8, 4))
-        plt.title('Waveform Visualization')
-        plt.xlabel('Time')
-        plt.ylabel('Amplitude')
-        librosa.display.waveshow(y, sr=sr)
-        st.pyplot()
+    # Plot waveform
+    plt.figure(figsize=(8, 4))
+    plt.title('Waveform Visualization')
+    plt.xlabel('Time')
+    plt.ylabel('Amplitude')
+    plt.plot(np.arange(len(y)) / sr, y)
+    st.pyplot()
 
 def main():
     st.title('Audio File Uploader and Waveform Visualizer')
