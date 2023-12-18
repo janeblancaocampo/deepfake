@@ -4,4 +4,3 @@ ffmpeg
 librosa 
 matplotlib
 io
-streamlit_webrtc
