@@ -1,16 +1,18 @@
 import streamlit as st
-from pydub import AudioSegment
-import io
+
+def process_audio_file(uploaded_file):
+    # Add your processing logic here
+    st.audio(uploaded_file, format='audio/wav')
 
 def main():
-    st.title("Audio Player App")
-    st.write("Upload an audio file and click play to listen!")
+    st.title('Audio File Uploader')
 
     uploaded_file = st.file_uploader("Upload an audio file", type=["mp3", "wav"])
 
     if uploaded_file is not None:
-        audio_bytes = uploaded_file.read()
-        st.audio(audio_bytes, format='audio/wav')
+        st.write("File uploaded successfully!")
+        if st.button('Process Audio'):
+            process_audio_file(uploaded_file)
 
 if __name__ == "__main__":
     main()
