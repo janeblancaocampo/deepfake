@@ -1,13 +1,21 @@
 import streamlit as st
 import librosa.display
 import matplotlib.pyplot as plt
-import numpy as np
+from pydub import AudioSegment
+import io
 
 def process_audio_file(uploaded_file):
     st.write("Generating waveform...")
 
-    # Load audio file
-    audio_data, _ = librosa.load(uploaded_file, sr=None)
+    # Convert the uploaded file to WAV format
+    audio_bytes = uploaded_file.getvalue()
+    audio = AudioSegment.from_file(io.BytesIO(audio_bytes))
+    wav_file = io.BytesIO()
+    audio.export(wav_file, format="wav")
+    wav_file.seek(0)
+
+    # Load the converted WAV file
+    audio_data, _ = librosa.load(wav_file, sr=None)
 
     # Plot the waveform
     plt.figure(figsize=(10, 4))
