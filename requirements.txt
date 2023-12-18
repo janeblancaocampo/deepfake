@@ -3,4 +3,4 @@ streamlit
 ffmpeg
 librosa 
 matplotlib
-io
+soundfile
