@@ -1,3 +1,4 @@
+import pydub
 import streamlit as st
 from io import BytesIO
 from pydub import AudioSegment
