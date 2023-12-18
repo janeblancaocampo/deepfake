@@ -1,8 +1,21 @@
 import streamlit as st
+import librosa.display
+import matplotlib.pyplot as plt
+import numpy as np
 
 def process_audio_file(uploaded_file):
-    # Add your processing logic here
-    st.audio(uploaded_file, format='audio/wav')
+    st.write("Generating waveform...")
+
+    # Load audio file
+    audio_data, _ = librosa.load(uploaded_file, sr=None)
+
+    # Plot the waveform
+    plt.figure(figsize=(10, 4))
+    librosa.display.waveshow(audio_data, sr=44100)  # Adjust 'sr' according to your audio file's sample rate
+    plt.title('Audio Waveform')
+    plt.xlabel('Time')
+    plt.ylabel('Amplitude')
+    st.pyplot()
 
 def main():
     st.title('Audio File Uploader')
