@@ -1,47 +1,32 @@
 import streamlit as st
-from streamlit_webrtc import webrtc_streamer, AudioProcessorBase, ClientSettings
-import librosa.display
-import matplotlib.pyplot as plt
 import io
+import matplotlib.pyplot as plt
+from pydub import AudioSegment
+import numpy as np
 
-class AudioProcessor(AudioProcessorBase):
-    def __init__(self):
-        self.audio_data = []
+def process_audio_file(uploaded_file):
+    st.audio(uploaded_file, format='audio/wav')
 
-    def recv(self, frame):
-        if frame:
-            audio_chunk = frame.to_ndarray(dtype="int16")
-            self.audio_data.extend(audio_chunk)
-        return frame
-
-def process_uploaded_audio(uploaded_file):
+    st.write("### Waveform of Uploaded Audio:")
     audio_data = io.BytesIO(uploaded_file.read())
+    audio = AudioSegment.from_file(audio_data)
+    samples = np.array(audio.get_array_of_samples())
 
-    st.write("### Uploaded Audio Waveform:")
-    audio, sr = librosa.load(audio_data, sr=None)
     plt.figure(figsize=(10, 4))
-    librosa.display.waveshow(audio, sr=sr)
+    plt.plot(samples)
+    plt.xlabel('Sample')
+    plt.ylabel('Amplitude')
     st.pyplot()
 
 def main():
-    st.title('Audio File Uploader and Recorder')
+    st.title('Audio File Uploader')
 
-    audio_file = st.file_uploader("Upload an audio file", type=["mp3", "wav"])
-    st.write("OR")
-    recording_state = webrtc_streamer(
-        key="audio-recorder",
-        mode=ClientSettings.Mode.SENDRECV,
-        audio=True,
-        processor_factory=AudioProcessor,
-    )
+    uploaded_file = st.file_uploader("Upload an audio file", type=["mp3", "wav"])
 
-    if audio_file is not None:
+    if uploaded_file is not None:
         st.write("File uploaded successfully!")
-        if st.button('Process Uploaded Audio'):
-            process_uploaded_audio(audio_file)
-
-    if recording_state:
-        st.write("Recording...")
+        if st.button('Process Audio'):
+            process_audio_file(uploaded_file)
 
 if __name__ == "__main__":
     main()
