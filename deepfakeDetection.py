@@ -1,4 +1,3 @@
-User
 import streamlit as st
 
 def process_audio_file(uploaded_file):
