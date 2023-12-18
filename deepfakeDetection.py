@@ -1,4 +1,6 @@
 import streamlit as st
+from io import BytesIO
+from pydub import AudioSegment
 
 def main():
     st.title('Audio File Uploader')
@@ -7,7 +9,9 @@ def main():
 
     if uploaded_file is not None:
         st.write("File uploaded successfully!")
-        # You can perform further processing or analysis with the uploaded file here
+
+        # Display the uploaded file
+        st.audio(uploaded_file, format='audio/mp3')
 
 if __name__ == "__main__":
     main()
