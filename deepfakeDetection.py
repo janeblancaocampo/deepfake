@@ -16,7 +16,7 @@ def process_audio_file(uploaded_file):
     plt.xlabel('Time')
     plt.ylabel('Amplitude')
     plt.plot(np.arange(len(y)) / sr, y)
-    st.pyplot()
+    st.pyplot() 
 
 def main():
     st.title('Audio File Uploader and Waveform Visualizer')
