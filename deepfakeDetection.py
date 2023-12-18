@@ -1,22 +1,23 @@
 import streamlit as st
-import io
+import soundfile as sf
 import matplotlib.pyplot as plt
-from pydub import AudioSegment
 import numpy as np
 
 def process_audio_file(uploaded_file):
     st.audio(uploaded_file, format='audio/wav')
 
     st.write("### Waveform of Uploaded Audio:")
-    audio_data = io.BytesIO(uploaded_file.read())
-    audio = AudioSegment.from_file(audio_data)
-    samples = np.array(audio.get_array_of_samples())
+    with sf.SoundFile(uploaded_file) as audio_file:
+        audio_data = audio_file.read()
+        num_samples = len(audio_data)
+        duration = num_samples / audio_file.samplerate
 
-    plt.figure(figsize=(10, 4))
-    plt.plot(samples)
-    plt.xlabel('Sample')
-    plt.ylabel('Amplitude')
-    st.pyplot()
+        time = np.linspace(0, duration, num_samples)
+        plt.figure(figsize=(10, 4))
+        plt.plot(time, audio_data)
+        plt.xlabel('Time (seconds)')
+        plt.ylabel('Amplitude')
+        st.pyplot()
 
 def main():
     st.title('Audio File Uploader')
