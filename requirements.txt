@@ -4,3 +4,4 @@ ffmpeg
 librosa 
 matplotlib
 numpy
+soundfile
